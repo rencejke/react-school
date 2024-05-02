@@ -1,5 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Student from "./components/pages/developper/database/Student";
+import Student from "./components/pages/developper/database/student/Student";
+import Staff from "./components/pages/developper/database/staff/Staff";
+import Teacher from "./components/pages/developper/database/teacher/Teacher";
 
 function App() {
 
@@ -7,7 +9,9 @@ function App() {
     <>
       <Router>
         <Routes>
-        <Route path="/database" element={<Student/> } />
+        <Route path="/database/student" element={<Student/> } />
+        <Route path="/database/staff" element={<Staff/> } />
+        <Route path="/database/teacher" element={<Teacher /> } />
         </Routes>
       </Router>
     </>
