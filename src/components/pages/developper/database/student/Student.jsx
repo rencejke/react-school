@@ -14,12 +14,20 @@ import ModalValidate from '../../../../partials/modals/ModalVlidate'
 import ModalConfirm from '../../../../partials/modals/ModalConfirm'
 import SpinnerWindow from '../../../../partials/spinners/SpinnerWindow'
 import useQueryData from '../../../../custom hook/useQueryData'
+import Toast from '../../../../partials/Toast'
+import ModalDelete from '../../../../partials/modals/ModalDelete'
 
 
 
 const Student = () => {
 
   const [showInfo, setShowInfo] = React.useState(false);
+  const [isAdd, setAdd] =  React.useState(false);
+  
+  const [isSuccess, setIsSuccess] = React.useState(false);
+  const [message, setMessage] = React.useState('');
+
+  const [itemEdit, setItemEdit] =  React.useState(null);
   const {
     isLoading,
     isFetching,
@@ -31,7 +39,12 @@ const Student = () => {
     "student" // key
   );
 
-  console.log(student);
+ const handleAdd = () =>
+  {
+    setAdd(true);
+    setItemEdit(null)
+  }
+
 
 
 
@@ -60,13 +73,14 @@ const Student = () => {
         <li className='tab-link'><Link to="/database/teacher">Teacher</Link></li>
         <li className='tab-link'><Link to="/database/staff">Staff</Link></li>
        </ul>
-       <button className='btn btn-accent'>
+       <button className='btn btn-accent' onClick={handleAdd}>
         <FiPlus /> New
         </button>
       </div>
 
      <StudentTable showInfo={showInfo} setShowInfo={setShowInfo} isLoading={isLoading}
-      student={student}     
+      student={student} setItemEdit={setItemEdit} setAdd={setAdd}  setIsSuccess={setIsSuccess}  
+      setMessage={setMessage}
      />
       </div>
       <DatabaseInformation  showInfo={showInfo}/>
@@ -75,9 +89,14 @@ const Student = () => {
       </div>
     </main>
    </section>
-   {/* <ModalAddStudent /> */}
+  {isAdd &&  <ModalAddStudent  setAdd={setAdd} setIsSuccess={setIsSuccess} 
+  setMessage={setMessage} itemEdit={itemEdit}/>}
+  
+
+  {isSuccess && <Toast setIsSuccess={setIsSuccess} message={message}/>}
+   {/* {showInfo ? <ModalAddStudent/> : ""} */}
    {/* <ModalError position="center"/> */}
-   {/* <ModalConfirm position="center"/> */}
+  
     {/* <SpinnerWindow /> */}
    </>
   )

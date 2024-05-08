@@ -4,9 +4,10 @@ import { PiArchive } from 'react-icons/pi'
 import TableLoader from '../../../../partials/TableLoader'
 import NoData from '../../../../partials/NoData'
 
-const TeacherTable = ({setShowInfo, showInfo}) => {
+const TeacherTable = ({setShowInfo, showInfo, teacher, isLoading}) => {
 
     const handleShowInfo = () => setShowInfo(!showInfo);
+    let counter = 1;
   return (
     <div className="table-wrapper relative">
       {/* <SpinnerFetching /> */}
@@ -24,38 +25,51 @@ const TeacherTable = ({setShowInfo, showInfo}) => {
           </thead>
           <tbody>
 
-              <tr>
-                <td colSpan={9}>
-                  <TableLoader count="20" cols="4"/>
-                </td>
-              </tr>
+          {isLoading && ( 
+                <tr>
+                    <td colSpan={9}>
+                        <TableLoader count="20" cols="4"/>
+                    </td>
+                </tr>)
+                }
 
-              <tr>
-                <td colSpan={9}>
-                  <NoData />
-                </td>
-              </tr>
+                  {teacher?.data.length === 0 && (
+                    <tr>
+                        <td colSpan={9}>
+                            <NoData/>
+                        </td>
+                    </tr>
+                )}
+             
 
+        
+            {teacher?.data.map((item, key) =>(
             <tr onDoubleClick={handleShowInfo}>
-              <td>1</td>
-              <td >Robert Fox</td>
-              <td>Science 4</td>
-              <td>7 yrs Old</td>
-              <td >Male</td>
-              <td >robertfox@gmail.com</td>
+              <td>{counter++}</td>
+              <td >{item.teacher_name}</td>
+              <td>{item.teacher_class}</td>
+              <td>{item.teacher_age}</td>
+              <td >{item.teacher_gender}</td>
+              <td >{item.teacher_email}</td>
               <td className='table-action'>
-                <ul>
-                      <li><button  className="tooltip"
-                       data-tooltip="Edit"><LiaEdit /></button></li>
-                      <li><button  className="tooltip"
-                       data-tooltip="Archive"><PiArchive /></button></li>
-                      <li><button  className="tooltip"
-                       data-tooltip="Restore"><LiaHistorySolid /></button></li>
-                      <li> <button  className="tooltip"
-                       data-tooltip="Delete"><LiaTrashAltSolid /></button></li>
-                </ul>
+
+              <ul>
+              {item.teacher_is_active ? (
+                   <>
+                   <li><button className="tooltip" data-tooltip="Edit"><LiaEdit/></button></li>
+                   <li><button className="tooltip" data-tooltip="Archive"><PiArchive /></button></li>
+                 </>
+                   ) : (
+                    <>
+                    <li><button className="tooltip" data-tooltip="Restore"><LiaHistorySolid/></button></li>
+                    <li><button className="tooltip" data-tooltip="Delete"><LiaTrashAltSolid/></button></li></>
+                )}
+              </ul>
+               
               </td>
             </tr>
+            ))
+          }
           </tbody>
         </table>
       </div>

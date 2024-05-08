@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom'
 import { FiPlus } from 'react-icons/fi'
 import DatabaseInformation from '../DatabaseInformation'
 import StaffTable from './StaffTable'
+import useQueryData from '../../../../custom hook/useQueryData'
 
 
 
@@ -13,6 +14,16 @@ const Staff = () => {
 
   const [showInfo, setShowInfo] = React.useState(false);
 
+  const {
+    isLoading,
+    isFetching,
+    error,
+    data: staff,
+  } = useQueryData(
+    "/v1/staff", // endpoint
+    "get", // method
+    "staff" // key
+  );
 
 
   return (
@@ -45,7 +56,7 @@ const Staff = () => {
         </button>
       </div>
 
-     <StaffTable showInfo={showInfo} setShowInfo={setShowInfo}/>
+     <StaffTable showInfo={showInfo} setShowInfo={setShowInfo} isLoading={isLoading} staff={staff}/>
       </div>
       <DatabaseInformation  showInfo={showInfo}/>
 

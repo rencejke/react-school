@@ -6,12 +6,23 @@ import { Link } from 'react-router-dom'
 import { FiPlus } from 'react-icons/fi'
 import DatabaseInformation from '../DatabaseInformation'
 import TeacherTable from './TeacherTable'
+import useQueryData from '../../../../custom hook/useQueryData'
 
 
 
 const Teacher = () => {
 
   const [showInfo, setShowInfo] = React.useState(false);
+  const {
+    isLoading,
+    isFetching,
+    error,
+    data: teacher,
+  } = useQueryData(
+    "/v1/teacher", // endpoint
+    "get", // method
+    "teacher" // key
+  );
 
 
 
@@ -45,7 +56,7 @@ const Teacher = () => {
         </button>
       </div>
 
-     <TeacherTable showInfo={showInfo} setShowInfo={setShowInfo}/>
+     <TeacherTable showInfo={showInfo} setShowInfo={setShowInfo} isLoading={isLoading} teacher={teacher}/>
       </div>
       <DatabaseInformation  showInfo={showInfo}/>
 

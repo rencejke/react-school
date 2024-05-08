@@ -2,15 +2,47 @@ import React from 'react'
 import ModalWrapper from './ModalWrapper'
 import { LiaTimesSolid, LiaTrashAltSolid } from 'react-icons/lia'
 import { BiErrorCircle } from 'react-icons/bi'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { queryData } from '../../helpers/queryData'
 
-const ModalDelete = ({position}) => {
+const ModalDelete = ({setIsSuccess, position, setIsDelete, endpoint, queryKey, setMessage}) => {
+  
+  const handleClose = () => setIsDelete(false);  
+
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation({
+    mutationFn: (values) => queryData(endpoint, "delete", values),
+
+
+
+    onSuccess: (data) => {
+      // Invalidate and refetch
+      queryClient.invalidateQueries({ queryKey: [queryKey] });
+
+      if (data.success) {
+        setIsDelete(false);
+        setIsSuccess(true)
+        setMessage('Record Successfully Deleted')
+      } else {
+        // setIsError(true)
+        // setMessage('Delete failed!')
+      }
+      
+    },
+  });
+
+  const handleDelete = async () => {
+    mutation.mutate();
+  };
+
   return (
    <ModalWrapper position={position}>
     <div className="modal-main max-w-[400px] w-full">
         <div className="modal-header bg-alert text-white flex 
         justify-between items-center p-3 rounded-t-md">
             <h4 className='mb-0 text-white'>Error</h4>
-            <button><LiaTimesSolid /></button>
+            <button onClick={handleClose}><LiaTimesSolid /></button>
         </div>
         <div className="modal-body p-4 rounded-b-md  bg-secondary">
 
@@ -24,8 +56,8 @@ const ModalDelete = ({position}) => {
 
 
         <div className='flex justify-end mx-auto gap-2'>
-        <button className='btn btn-alert btn-form w-1/4'>Delete</button>
-        <button className='btn btn-cancel btn-form w-1/4'>Cancel</button>
+        <button className='btn btn-alert btn-form w-1/4' onClick={handleDelete}>Delete</button>
+        <button className='btn btn-cancel btn-form w-1/4' onClick={handleClose}>Cancel</button>
         </div>
         </div>
     </div>

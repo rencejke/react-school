@@ -6,7 +6,7 @@ $error = [];
 $returnData = [];
 
 if (empty($_GET)) {
-    $query = checkReadAll($staff);
+    $query = checkReadAll($teacher);
     http_response_code(200);
     getQueriedData($query);
 }

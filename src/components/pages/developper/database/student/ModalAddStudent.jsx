@@ -5,20 +5,50 @@ import SpinnerButton from '../../../../partials/spinners/SpinnerButton'
 import { InputText } from '../../../../helpers/FormInput'
 import { Form, Formik } from 'formik'
 import * as Yup from 'yup'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { queryData } from '../../../../helpers/queryData'
 
-const ModalAddStudent = () => {
+const ModalAddStudent = ({setAdd, setIsSuccess, setMessage, itemEdit}) => {
+    
+    const handleClose = () => setAdd(false);
+
+    const queryClient = useQueryClient();
+    const mutation = useMutation({
+        mutationFn: (values) =>
+        queryData(
+          itemEdit ? `/v1/student/${itemEdit.student_aid}`: `/v1/student`,
+          itemEdit ? "put" : "post" ,
+            values
+        ),
+        // ;
+
+        onSuccess: (data) => {
+        queryClient.invalidateQueries({ queryKey: ["student"] });
+        if (data.success) {
+            setAdd(false);
+            setIsSuccess(true);
+            setMessage(`Successfuly updated.`);
+        } else {
+            // setIsError(true);
+        }
+      
+        },
+    });
+   
+
+    
 
     const initVal = 
     {
-        student_name: "",
-        student_class: "",
-        student_age: "",
+        student_name: itemEdit ? itemEdit.student_name : "",
+        student_class: itemEdit ? itemEdit.student_class : "",
+        student_age: itemEdit ? itemEdit.student_age : "",
     }
 
 
     const yupSchema = Yup.object({
        student_name: Yup.string().required("Required"),
-       student_class: Yup.string().required("Required").email('Inavalid Email'),
+       student_class: Yup.string().required("Required"),
        student_age: Yup.string().required("Required"),
 
     })
@@ -27,7 +57,7 @@ const ModalAddStudent = () => {
         <div className="main-modal w-[300px] bg-secondary text-content h-full">
             <div className="modal-header p-4 relative">
                 <h2>New Student</h2>
-                <button className='absolute top-[25px] right-4'>
+                <button className='absolute top-[25px] right-4' onClick={handleClose}>
                     <LiaTimesSolid /></button>
             </div>
             <div className="modal-body p-4">
@@ -35,12 +65,12 @@ const ModalAddStudent = () => {
                 initialValues={initVal}
                 validationSchema={yupSchema}
                 onSubmit = {async (values) => {
-                    console.log(values)
+                    mutation.mutate(values)
                 }}
                 >
 
             {(props) => {return (
-                <Form action="" className='h-[calc(100vh-110px)] flex flex-col justify-between'>
+                <Form className='h-[calc(100vh-110px)] flex flex-col justify-between'>
                     <div className='grow overflow-y-auto'>
 
                     <div className="input-wrapper">
@@ -80,8 +110,8 @@ const ModalAddStudent = () => {
 
                     </div>
                     <div className='form-action'>
-                      <button className='btn btn-accent btn-form' type="submit"> Add <SpinnerButton /> </button>
-                      <button className='btn btn-cancel btn-form' type="button"> Canceled </button>
+                      <button className='btn btn-accent btn-form' type="submit"> {mutation.isPending ?  <SpinnerButton /> : "Add" } </button>
+                      <button className='btn btn-cancel btn-form' type="button" onClick={handleClose}> Canceled </button>
                     </div>
                 </Form>)}}
                 </Formik>
