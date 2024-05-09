@@ -1,26 +1,23 @@
 import React from 'react'
 import { FaTimes } from 'react-icons/fa';
 import { LiaEnvelope, LiaKeySolid } from 'react-icons/lia'
-import { StoreContext } from '../../../../store/StoreContext';
-import { setIsShow } from '../../../../store/StoreAction';
 
-const DatabaseInformation = ({showInfo, studentInfo}) => {
+const DatabaseInfoTeacher = ({showInfo, teacherInfo, setShowInfo}) => {
 
-  
-  const {store, dispatch} = React.useContext(StoreContext);
+  console.log(teacherInfo);
 
-  const handleClose = () => dispatch(setIsShow(false))
+  const handleClose = () => setShowInfo(false)
   return (
-    <div className={`information absolute bg-primary z-[9999]
-    border-l border-line min-h-[calc(100vh-65px)] overflow-hidden w-1/4 ${store.isShow ? "right-0" : "-right-1/4"}`}>
+    <div className={`information absolute
+    border-l border-line min-h-[calc(100vh-65px)] overflow-hidden w-1/4 ${showInfo ? "right-0" : "-right-1/4"}`}>
 
       <button className='absolute top-0 left-0 size-10 grid place-content-center bg-secondary text-content' onClick={handleClose}><FaTimes /></button>
 
       <div className='p-10'>
       <div className="text-center mb-8 ">
      <img src="https://via.placeholder.com/100x100" alt="" className='size-[100px] mx-auto rounded-full object-cover mb-4'/>
-        <h3 className='mb-1'>{studentInfo.student_name}</h3>
-        <small className='opacity-60'>{studentInfo.student_class}</small>
+        <h3 className='mb-1'>{teacherInfo.teacher_name}</h3>
+        <small className='opacity-60'>{teacherInfo.teacher_email}</small>
         <ul className='flex gap-5 mt-5 justify-center'>
           <li>
             <button className='text-2xl tooltip' data-tooltip="Account"><LiaKeySolid /> </button>
@@ -59,4 +56,4 @@ const DatabaseInformation = ({showInfo, studentInfo}) => {
   )
 }
 
-export default DatabaseInformation
+export default DatabaseInfoTeacher

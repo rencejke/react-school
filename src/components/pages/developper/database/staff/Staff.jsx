@@ -7,10 +7,13 @@ import { FiPlus } from 'react-icons/fi'
 import DatabaseInformation from '../DatabaseInformation'
 import StaffTable from './StaffTable'
 import useQueryData from '../../../../custom hook/useQueryData'
+import DatabaseInfoStaff from './DatabaseInfoStaff'
 
 
 
 const Staff = () => {
+
+  const [staffInfo, setStaffInfo] = React.useState('');
 
   const [showInfo, setShowInfo] = React.useState(false);
 
@@ -58,7 +61,7 @@ const Staff = () => {
 
      <StaffTable showInfo={showInfo} setShowInfo={setShowInfo} isLoading={isLoading} staff={staff}/>
       </div>
-      <DatabaseInformation  showInfo={showInfo}/>
+      <DatabaseInfoStaff  showInfo={showInfo} staffInfo={staffInfo}/>
 
 
       </div>

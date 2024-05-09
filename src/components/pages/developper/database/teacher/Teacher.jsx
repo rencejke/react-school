@@ -7,11 +7,15 @@ import { FiPlus } from 'react-icons/fi'
 import DatabaseInformation from '../DatabaseInformation'
 import TeacherTable from './TeacherTable'
 import useQueryData from '../../../../custom hook/useQueryData'
+import DatabaseInfoTeacher from './DatabaseInfoTeacher'
 
 
 
 const Teacher = () => {
 
+  const [teacherInfo, setTeacherInfo] = React.useState('');
+
+    
   const [showInfo, setShowInfo] = React.useState(false);
   const {
     isLoading,
@@ -56,9 +60,10 @@ const Teacher = () => {
         </button>
       </div>
 
-     <TeacherTable showInfo={showInfo} setShowInfo={setShowInfo} isLoading={isLoading} teacher={teacher}/>
+     <TeacherTable showInfo={showInfo} setShowInfo={setShowInfo} isLoading={isLoading} 
+     teacher={teacher} setTeacherInfo={setTeacherInfo}/>
       </div>
-      <DatabaseInformation  showInfo={showInfo}/>
+      <DatabaseInfoTeacher  showInfo={showInfo} teacherInfo={teacherInfo} setShowInfo={setShowInfo}/>
 
 
       </div>

@@ -3,6 +3,7 @@ import Student from "./components/pages/developper/database/student/Student";
 import Staff from "./components/pages/developper/database/staff/Staff";
 import Teacher from "./components/pages/developper/database/teacher/Teacher";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { StoreProvider } from "./store/StoreContext";
 
 function App() {
  
@@ -10,6 +11,7 @@ function App() {
   return (
     <>
     <QueryClientProvider client={queryClient}>
+      <StoreProvider>
       <Router>
         <Routes>
         <Route path="/database/student" element={<Student/> } />
@@ -17,6 +19,7 @@ function App() {
         <Route path="/database/teacher" element={<Teacher /> } />
         </Routes>
       </Router>
+      </StoreProvider>
       </QueryClientProvider>
     </>
   )

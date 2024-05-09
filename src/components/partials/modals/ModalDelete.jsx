@@ -4,10 +4,13 @@ import { LiaTimesSolid, LiaTrashAltSolid } from 'react-icons/lia'
 import { BiErrorCircle } from 'react-icons/bi'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { queryData } from '../../helpers/queryData'
+import { StoreContext } from '../../../store/StoreContext'
+import { setIsDelete, setMessage, setSuccess } from '../../../store/StoreAction'
 
-const ModalDelete = ({setIsSuccess, position, setIsDelete, endpoint, queryKey, setMessage}) => {
+const ModalDelete = ({position, endpoint, queryKey}) => {
   
-  const handleClose = () => setIsDelete(false);  
+  const {store, dispatch} = React.useContext(StoreContext)
+  const handleClose = () => dispatch(setIsDelete(false)) 
 
   const queryClient = useQueryClient();
 
@@ -21,9 +24,9 @@ const ModalDelete = ({setIsSuccess, position, setIsDelete, endpoint, queryKey, s
       queryClient.invalidateQueries({ queryKey: [queryKey] });
 
       if (data.success) {
-        setIsDelete(false);
-        setIsSuccess(true)
-        setMessage('Record Successfully Deleted')
+        dispatch(setIsDelete(false)) 
+        dispatch(setSuccess(true))
+        dispatch(setMessage('Record Successfully Deleted'))
       } else {
         // setIsError(true)
         // setMessage('Delete failed!')

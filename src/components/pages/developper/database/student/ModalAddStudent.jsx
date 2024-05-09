@@ -2,15 +2,19 @@ import React from 'react'
 import { LiaTimesSolid } from 'react-icons/lia'
 import ModalWrapper from '../../../../partials/modals/ModalWrapper'
 import SpinnerButton from '../../../../partials/spinners/SpinnerButton'
-import { InputText } from '../../../../helpers/FormInput'
+import { InputSelect, InputText } from '../../../../helpers/FormInput'
 import { Form, Formik } from 'formik'
 import * as Yup from 'yup'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { queryData } from '../../../../helpers/queryData'
+import { StoreContext } from '../../../../../store/StoreContext'
+import { setIsAdd, setMessage, setSuccess } from '../../../../../store/StoreAction'
 
-const ModalAddStudent = ({setAdd, setIsSuccess, setMessage, itemEdit}) => {
+const ModalAddStudent = ({itemEdit}) => {
     
-    const handleClose = () => setAdd(false);
+    
+    const{dispatch} = React.useContext(StoreContext);
+    const handleClose = () => dispatch(setIsAdd(false));
 
     const queryClient = useQueryClient();
     const mutation = useMutation({
@@ -25,9 +29,9 @@ const ModalAddStudent = ({setAdd, setIsSuccess, setMessage, itemEdit}) => {
         onSuccess: (data) => {
         queryClient.invalidateQueries({ queryKey: ["student"] });
         if (data.success) {
-            setAdd(false);
-            setIsSuccess(true);
-            setMessage(`Successfuly updated.`);
+           dispatch( setIsAdd(false));
+            dispatch(setSuccess(true));
+            dispatch( setMessage(`Successfuly updated.`));
         } else {
             // setIsError(true);
         }
@@ -41,15 +45,19 @@ const ModalAddStudent = ({setAdd, setIsSuccess, setMessage, itemEdit}) => {
     const initVal = 
     {
         student_name: itemEdit ? itemEdit.student_name : "",
-        student_class: itemEdit ? itemEdit.student_class : "",
         student_age: itemEdit ? itemEdit.student_age : "",
+        student_class: itemEdit ? itemEdit.student_class : "",
+        student_gender: itemEdit ? itemEdit.student_gender : "",
+        student_email: itemEdit ? itemEdit.student_email : "",
     }
 
 
     const yupSchema = Yup.object({
        student_name: Yup.string().required("Required"),
-       student_class: Yup.string().required("Required"),
        student_age: Yup.string().required("Required"),
+       student_class: Yup.string().required("Required"),
+       student_gender: Yup.string().required("Required"),
+       student_email: Yup.string().required("Required").email("Invalid Email")
 
     })
   return (
@@ -90,21 +98,34 @@ const ModalAddStudent = ({setAdd, setIsSuccess, setMessage, itemEdit}) => {
                         />
                     </div>
 
-                    {/* <div className="input-wrapper">
-                        <label htmlFor="">Name</label>
-                        <select>
-                            <option value="Male"  className='text-stone-900'>Male</option>
-                            <option value="Female"  className='text-stone-900'>Female</option>
-                        </select>
-                        <small className='error-msg'>Required</small>
-                    </div> */}
-
-                   
                     <div className="input-wrapper">
                         <InputText
                         label="Age"
                         type="number"
                         name="student_age"
+                        />
+                    </div>
+
+                    <div className="input-wrapper">
+                    <InputSelect
+                        label="Gender"
+                        name="student_gender"
+                        
+                      >
+                        <option value="" hidden>Select</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                      </InputSelect>
+                    </div>
+
+                   
+                  
+
+                    <div className="input-wrapper">
+                        <InputText
+                        label="Email"
+                        type="email"
+                        name="student_email"
                         />
                     </div>
 

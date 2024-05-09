@@ -4,9 +4,14 @@ import { PiArchive } from 'react-icons/pi'
 import TableLoader from '../../../../partials/TableLoader'
 import NoData from '../../../../partials/NoData'
 
-const TeacherTable = ({setShowInfo, showInfo, teacher, isLoading}) => {
+const TeacherTable = ({setShowInfo, showInfo, teacher, isLoading, setTeacherInfo}) => {
+      
+  const handleShowInfo = (item) => {
+    setTeacherInfo(item)
+    setShowInfo(true)
+  
+  };
 
-    const handleShowInfo = () => setShowInfo(!showInfo);
     let counter = 1;
   return (
     <div className="table-wrapper relative">
@@ -44,7 +49,7 @@ const TeacherTable = ({setShowInfo, showInfo, teacher, isLoading}) => {
 
         
             {teacher?.data.map((item, key) =>(
-            <tr onDoubleClick={handleShowInfo}>
+            <tr onDoubleClick={() => handleShowInfo(item)} key={key}>
               <td>{counter++}</td>
               <td >{item.teacher_name}</td>
               <td>{item.teacher_class}</td>

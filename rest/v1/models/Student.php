@@ -15,6 +15,8 @@ Class Student {
     public $lastInsertedId;
     public $tblStudent;
 
+    public $student_search;
+
     public function __construct($db) {
         $this->connection = $db;
         $this->tblStudent = "react_school_student";
@@ -27,14 +29,16 @@ Class Student {
             $sql .= "student_class, ";
             $sql .= "student_age, ";
             $sql .= "student_is_active, ";
+            $sql .= "student_gender, ";
+            $sql .= "student_email, ";
             $sql .= "student_created, ";
             $sql .= "student_datetime ) values ( ";
             $sql .= ":student_name, ";
             $sql .= ":student_class, ";
             $sql .= ":student_age, ";
             $sql .= ":student_is_active, ";
-            // $sql .= ":student_gender, ";
-            // $sql .= ":student_email, ";
+            $sql .= ":student_gender, ";
+            $sql .= ":student_email, ";
             $sql .= ":student_created, ";
             $sql .= ":student_datetime ) ";
             $query = $this->connection->prepare($sql);
@@ -43,8 +47,8 @@ Class Student {
                 "student_class" => $this->student_class,
                 "student_age" => $this->student_age,
                 "student_is_active" => $this->student_is_active,
-                // "student_gender" => $this->student_gender,
-                // "student_email" => $this->student_email,
+                "student_gender" => $this->student_gender,
+                "student_email" => $this->student_email,
                 "student_created" => $this->student_created,
                 "student_datetime" => $this->student_datetime,
             ]);
@@ -129,6 +133,26 @@ Class Student {
                 "student_is_active" => $this->student_is_active,
                 "student_datetime" => $this->student_datetime,
                 "student_aid" => $this->student_aid,
+            ]);
+        } catch (PDOException $ex) {
+            $query = false;
+        }
+        return $query;
+    }
+
+
+    public function search()
+    {
+        try {
+            $sql = "select ";
+            $sql .= "* ";
+            $sql .= "from {$this->tblStudent} ";
+            $sql .= "where student_name like :student_name ";
+            $sql .= "order by student_is_active desc, ";
+            $sql .= "student_name asc ";
+            $query = $this->connection->prepare($sql);
+            $query->execute([
+                "student_name" => "%{$this->student_search}%",
             ]);
         } catch (PDOException $ex) {
             $query = false;
