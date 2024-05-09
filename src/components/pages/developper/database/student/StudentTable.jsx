@@ -41,7 +41,7 @@ const StudentTable = ({ showInfo, student, isLoading, setItemEdit, setStudentInf
 
         const handleRestore = (item)=> 
           {
-            setIsActive(true);
+            dispatch(setIsActive(true));
             setId(item.student_aid);
             setIsArchiving(1)
           }
